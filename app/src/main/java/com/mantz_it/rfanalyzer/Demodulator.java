@@ -62,11 +62,11 @@ public class Demodulator extends Thread {
 														1500,	// LSB
 														1500};	// USB
 	public static final int[] MAX_USER_FILTER_WIDTH = {0,		// off
-														15000,	// AM
+														20000,	// AM
 														15000,	// nFM
 														120000,	// wFM
-														5000,	// LSB
-														5000};  // USB
+														30000,	// LSB
+														30000};  // USB
 
 	// DEMODULATION
 	private SamplePacket demodulatorHistory;	// used for FM demodulation
