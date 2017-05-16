@@ -1218,6 +1218,42 @@ public class MainActivity extends AppCompatActivity implements IQSourceInterface
 				final SeekBar sb_rtlsdr_ifGain = (SeekBar) view_rtlsdr.findViewById(R.id.sb_rtlsdr_ifgain);
 				final TextView tv_rtlsdr_gain = (TextView) view_rtlsdr.findViewById(R.id.tv_rtlsdr_gain);
 				final TextView tv_rtlsdr_ifGain = (TextView) view_rtlsdr.findViewById(R.id.tv_rtlsdr_ifgain);
+				final SeekBar sb_demod_afGain = (SeekBar) view_rtlsdr.findViewById(R.id.sb_demod_afgain);
+				final TextView tv_demod_afGain = (TextView) view_rtlsdr.findViewById(R.id.tv_demod_afgain);
+
+				// Assign AF gain
+
+				tv_demod_afGain.setText("Auto");
+				sb_demod_afGain.setProgress(0);
+
+				if(demodulator != null) {
+						if(demodulator.getAfGain() == 0)
+							tv_demod_afGain.setText("Auto");
+						else
+							tv_demod_afGain.setText("" + demodulator.getAfGain());
+					sb_demod_afGain.setProgress((int) demodulator.getAfGain());
+				}
+
+				sb_demod_afGain.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+					@Override
+					public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+						if(demodulator != null) {
+							if(progress == 0)
+								tv_demod_afGain.setText("Auto");
+							else
+								tv_demod_afGain.setText("" + progress);
+							demodulator.setAfGain((float) progress);
+						}
+					}
+
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {
+					}
+
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar) {
+					}
+				});
 
 				// Assign current gain:
 				int gainIndex = 0;

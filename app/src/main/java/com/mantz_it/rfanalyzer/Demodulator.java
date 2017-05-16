@@ -62,7 +62,7 @@ public class Demodulator extends Thread {
 														1500,	// LSB
 														1500};	// USB
 	public static final int[] MAX_USER_FILTER_WIDTH = {0,		// off
-														20000,	// AM
+														15000,	// AM
 														15000,	// nFM
 														120000,	// wFM
 														30000,	// LSB
@@ -80,6 +80,7 @@ public class Demodulator extends Thread {
 	public static final int DEMODULATION_LSB 	= 4;
 	public static final int DEMODULATION_USB 	= 5;
 	public int demodulationMode;
+	public float afGain = 10.0f;
 
 	// AUDIO OUTPUT
 	private AudioSink audioSink = null;		// Will do QUADRATURE_RATE --> AUDIO_RATE and audio output
@@ -107,6 +108,20 @@ public class Demodulator extends Thread {
 		// Note that the decimator directly reads from the inputQueue and also returns processed packets to the
 		// output queue.
 		this.decimator = new Decimator(QUADRATURE_RATE[demodulationMode], packetSize, inputQueue, outputQueue);
+	}
+
+	/**
+	 * @return AF Gain
+	 */
+	public float getAfGain() {
+		return afGain;
+	}
+
+	/**
+	 * @param gain
+	 */
+	public void setAfGain(float gain) {
+		afGain = gain;
 	}
 
 	/**
@@ -346,7 +361,10 @@ public class Demodulator extends Thread {
 		// normalize values:
 		float gain = 0.75f/lastMax;
 		for (int i = 0; i < output.size(); i++)
-			reOut[i] = (reOut[i] - avg) * gain;
+			if(afGain == 0)
+				reOut[i] = (reOut[i] - avg) * gain;
+		else
+			reOut[i] *= afGain;
 
 		output.setSize(input.size());
 		output.setSampleRate(QUADRATURE_RATE[demodulationMode]);
@@ -396,6 +414,9 @@ public class Demodulator extends Thread {
 		// normalize values:
 		float gain = 0.75f/lastMax;
 		for (int i = 0; i < output.size(); i++)
-			reOut[i] *= gain;
+			if(afGain == 0)
+				reOut[i] *= gain;
+			else
+				reOut[i] *= afGain;
 	}
 }
