@@ -196,7 +196,7 @@ public class Scheduler extends Thread {
 			}
 
 			///// Demodulation /////////////////////////////////////////////////////////////////////
-			if(demodulationActivated && squelchSatisfied) {
+			if(demodulationActivated /* && squelchSatisfied */) {
 				// Get a buffer from the demodulator inputQueue
 				demodBuffer = demodInputQueue.poll();
 				if (demodBuffer != null) {

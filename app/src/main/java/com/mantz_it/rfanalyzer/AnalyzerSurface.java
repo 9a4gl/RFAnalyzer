@@ -675,10 +675,12 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 				this.setDBScale(newMinDB, newMaxDB);
 
 				// adjust the squelch if it is outside the visible viewport right now:
+				/*
 				if(squelch < minDB)
 					squelch = minDB;
 				if(squelch > maxDB)
 					squelch = maxDB;
+					*/
 			}
 
 			// Automatically re-adjust the sample rate of the source if we zoom too far out or in
