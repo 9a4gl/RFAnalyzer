@@ -44,7 +44,9 @@ public class Demodulator extends Thread {
 													2*AUDIO_RATE,	// nFM
 													8*AUDIO_RATE,	// wFM
 													2*AUDIO_RATE,	// LSB
-													2*AUDIO_RATE};	// USB
+													2*AUDIO_RATE,	// USB
+													2*AUDIO_RATE,	// LCW
+													2*AUDIO_RATE};	// UCW
 	public static final int INPUT_RATE = 1000000;	// Expected rate of the incoming samples
 
 	// DECIMATION
@@ -60,13 +62,17 @@ public class Demodulator extends Thread {
 														3000,	// nFM
 														50000,	// wFM
 														1500,	// LSB
-														1500};	// USB
+														1500,	// USB
+														100,	// LCW
+														100};	// UCW
 	public static final int[] MAX_USER_FILTER_WIDTH = {0,		// off
 														15000,	// AM
 														15000,	// nFM
 														120000,	// wFM
 														5000,	// LSB
-														5000};  // USB
+														5000,	// USB
+														500,	// LCW
+														500};	// UCW
 
 	// DEMODULATION
 	private SamplePacket demodulatorHistory;	// used for FM demodulation
@@ -79,6 +85,8 @@ public class Demodulator extends Thread {
 	public static final int DEMODULATION_WFM 	= 3;
 	public static final int DEMODULATION_LSB 	= 4;
 	public static final int DEMODULATION_USB 	= 5;
+	public static final int DEMODULATION_LCW 	= 6;
+	public static final int DEMODULATION_UCW 	= 7;
 	public int demodulationMode;
 
 	// AUDIO OUTPUT
@@ -124,7 +132,7 @@ public class Demodulator extends Thread {
 	 * @param demodulationMode	Demodulation Mode (DEMODULATION_OFF, *_AM, *_NFM, *_WFM, ...)
 	 */
 	public void setDemodulationMode(int demodulationMode) {
-		if(demodulationMode > 5 || demodulationMode < 0) {
+		if(demodulationMode > 7 || demodulationMode < 0) {
 			Log.e(LOGTAG,"setDemodulationMode: invalid mode: " + demodulationMode);
 			return;
 		}
@@ -230,6 +238,14 @@ public class Demodulator extends Thread {
 					break;
 
 				case DEMODULATION_USB:
+					demodulateSSB(quadratureSamples, audioBuffer, true);
+					break;
+
+				case DEMODULATION_LCW:
+					demodulateSSB(quadratureSamples, audioBuffer, false);
+					break;
+
+				case DEMODULATION_UCW:
 					demodulateSSB(quadratureSamples, audioBuffer, true);
 					break;
 
@@ -359,7 +375,7 @@ public class Demodulator extends Thread {
 	 *
 	 * @param input		incoming (modulated) samples
 	 * @param output	outgoing (demodulated) samples
-	 * @param upperBand	if true: USB; if false: LSB
+	 * @param upperBand	if true: USB/UCW; if false: LSB/LCW
 	 */
 	private void demodulateSSB(SamplePacket input, SamplePacket output, boolean upperBand) {
 		float[] reOut = output.re();

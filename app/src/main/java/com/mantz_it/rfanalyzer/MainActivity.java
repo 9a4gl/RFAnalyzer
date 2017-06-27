@@ -364,6 +364,14 @@ public class MainActivity extends AppCompatActivity implements IQSourceInterface
 							iconRes = R.drawable.ic_action_demod_usb;
 							titleRes = R.string.action_demodulation_usb;
 							break;
+						case Demodulator.DEMODULATION_LCW:
+							iconRes = R.drawable.ic_action_demod_ucw;
+							titleRes = R.string.action_demodulation_lcw;
+							break;
+						case Demodulator.DEMODULATION_UCW:
+							iconRes = R.drawable.ic_action_demod_ucw;
+							titleRes = R.string.action_demodulation_ucw;
+							break;
 						default:
 							Log.e(LOGTAG, "updateActionBar: invalid mode: " + demodulationMode);
 							iconRes = -1;
@@ -1011,8 +1019,8 @@ public class MainActivity extends AppCompatActivity implements IQSourceInterface
 			analyzerSurface.setDemodulationEnabled(true);	// will re-adjust channel freq, width and squelch,
 															// if they are outside the current viewport and update the
 															// demodulator via callbacks.
-			analyzerSurface.setShowLowerBand(mode != Demodulator.DEMODULATION_USB);		// show lower side band if not USB
-			analyzerSurface.setShowUpperBand(mode != Demodulator.DEMODULATION_LSB);		// show upper side band if not LSB
+			analyzerSurface.setShowLowerBand(mode != Demodulator.DEMODULATION_USB && mode != Demodulator.DEMODULATION_UCW);		// show lower side band if not USB/UCW
+			analyzerSurface.setShowUpperBand(mode != Demodulator.DEMODULATION_LSB && mode != Demodulator.DEMODULATION_LCW);		// show upper side band if not LSB/LCW
 		}
 
 		// update action bar:

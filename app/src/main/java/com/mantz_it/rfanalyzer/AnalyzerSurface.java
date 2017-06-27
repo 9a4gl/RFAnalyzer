@@ -1347,7 +1347,10 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 				shownChannelWidth += channelWidth;
 			if(showUpperBand)
 				shownChannelWidth += channelWidth;
-			textStr = String.format("%d kHz", shownChannelWidth/1000);
+			if (shownChannelWidth > 1000)
+				textStr = String.format("%d kHz", shownChannelWidth / 1000);
+			else
+				textStr = String.format("%d Hz", shownChannelWidth);
 			textSmallPaint.getTextBounds(textStr, 0, textStr.length(), bounds);
 			c.drawText(textStr, channelPosition - bounds.width()/2f, squelchPosition + bounds.height() * 1.1f, textSmallPaint);
 		}

@@ -7,6 +7,8 @@
         <item>wide-band FM</item>
         <item>LSB</item>
         <item>USB</item>
+        <item>LCW</item>
+        <item>UCW</item>
     </string-array>
     <string-array name="pref_sourceType_entries">
         <item>File Source</item>
