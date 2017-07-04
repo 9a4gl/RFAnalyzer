@@ -74,6 +74,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements IQSourceInterface.Callback, RFControlInterface {
 
 	private MenuItem mi_startStop = null;
+	private MenuItem mi_startStop80m = null;
+	private MenuItem mi_startStop2m = null;
 	private MenuItem mi_demodulationMode = null;
 	private MenuItem mi_record = null;
 	private FrameLayout fl_analyzerFrame = null;
@@ -268,6 +270,8 @@ public class MainActivity extends AppCompatActivity implements IQSourceInterface
 		getMenuInflater().inflate(R.menu.main, menu);
 		// Get a reference to the start-stop button:
 		mi_startStop = menu.findItem(R.id.action_startStop);
+		mi_startStop80m = menu.findItem(R.id.action_startStop_80m);
+		mi_startStop2m = menu.findItem(R.id.action_startStop_2m);
 		mi_demodulationMode = menu.findItem(R.id.action_setDemodulation);
 		mi_record = menu.findItem(R.id.action_record);
 
@@ -283,6 +287,50 @@ public class MainActivity extends AppCompatActivity implements IQSourceInterface
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		switch (id) {
+			case R.id.action_startStop_80m:
+				if (!running)
+				{
+					Toast.makeText(MainActivity.this, "Radio not running, start radio first", Toast.LENGTH_LONG).show();
+					return true;
+				}
+				long freq80m = 3555000L;
+				int freq80mOffset = 100000000;
+				int sampleRate80m = 1024000;
+				source.setFrequency(freq80m);
+				source.setSampleRate(sampleRate80m);
+				((RtlsdrSource)source).setFrequencyOffset(freq80mOffset);
+				((RtlsdrSource)source).setManualGain(true);
+				((RtlsdrSource)source).setAutomaticGainControl(false);
+				((RtlsdrSource)source).setGain(402);
+				((RtlsdrSource)source).setIFGain(0);
+				analyzerSurface.setVirtualFrequency(freq80m + freq80mOffset);
+				analyzerSurface.setVirtualSampleRate(sampleRate80m);
+				analyzerSurface.setDBScale(-100, 10);
+				analyzerSurface.setSquelch(-90.0f);
+				setDemodulationMode(Demodulator.DEMODULATION_LCW);
+				break;
+			case R.id.action_startStop_2m:
+				if (!running)
+				{
+					Toast.makeText(MainActivity.this, "Radio not running, start radio first", Toast.LENGTH_LONG).show();
+					return true;
+				}
+				long freq2m = 144550000L;
+				int freq2mOffset = 0;
+				int sampleRate2m = 1024000;
+				source.setFrequency(freq2m);
+				source.setSampleRate(sampleRate2m);
+				((RtlsdrSource)source).setFrequencyOffset(freq2mOffset);
+				((RtlsdrSource)source).setManualGain(true);
+				((RtlsdrSource)source).setAutomaticGainControl(false);
+				((RtlsdrSource)source).setGain(402);
+				((RtlsdrSource)source).setIFGain(0);
+				analyzerSurface.setVirtualFrequency(freq2m + freq2mOffset);
+				analyzerSurface.setVirtualSampleRate(sampleRate2m);
+				analyzerSurface.setDBScale(-100, 10);
+				analyzerSurface.setSquelch(-90.0f);
+				setDemodulationMode(Demodulator.DEMODULATION_UCW);
+				break;
 			case R.id.action_startStop:		if(running)
 												stopAnalyzer();
 											else

@@ -680,7 +680,7 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 					squelch = minDB;
 				if(squelch > maxDB)
 					squelch = maxDB;
-					*/
+				*/
 			}
 
 			// Automatically re-adjust the sample rate of the source if we zoom too far out or in

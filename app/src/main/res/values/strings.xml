@@ -7,6 +7,8 @@
     <string name="action_info">Info</string>
     <string name="action_start">Start</string>
     <string name="action_stop">Stop</string>
+    <string name="action_start_80m">Start 80m</string>
+    <string name="action_start_2m">Start 2m</string>
     <string name="action_demodulation_off">Demodulation: off</string>
     <string name="action_demodulation_am">Demodulation: AM</string>
     <string name="action_demodulation_nfm">Demodulation: narrow FM</string>
