@@ -1034,6 +1034,13 @@ public class AnalyzerSurface extends SurfaceView implements SurfaceHolder.Callba
 			float sum = 0;
 			int chanStart = (int) ((channelFrequency - (frequency-sampleRate/2) - channelWidth/2) * samplesPerHz);
 			int chanEnd = (int)(chanStart + channelWidth * samplesPerHz);
+			if (chanEnd == chanStart)
+			{
+				if (chanStart > 0)
+					chanStart--;
+				else
+					chanEnd++;
+			}
 			if(chanStart > 0 && chanEnd <= mag.length) {
 				for (int i = chanStart; i < chanEnd; i++)
 					sum += mag[i];
